@@ -96,19 +96,6 @@
       "native": {}
     },
     {
-      "_id": "Aktiv",
-      "type": "state",
-      "common": {
-        "role": "switch",
-        "name": "Agent aktiv (Hauptschalter)",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": true
-      },
-      "native": {}
-    },
-    {
       "_id": "Metrik.NetzbezugWh",
       "type": "state",
       "common": {

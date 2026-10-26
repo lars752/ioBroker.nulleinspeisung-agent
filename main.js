@@ -107,7 +107,6 @@ class NullEinspeisungAgent extends utils.Adapter {
 
     _startObserveLoop(intervalS, target) {
         const tick = async () => {
-            if (!this._isActive()) return;
             try {
                 const [meterSt, sollSt] = await Promise.all([
                     this.getForeignStateAsync(`${target}.Zaehler_W`),
@@ -144,7 +143,6 @@ class NullEinspeisungAgent extends utils.Adapter {
 
     _startTuneLoop(intervalS, target, cfg) {
         const tick = async () => {
-            if (!this._isActive()) return;
             try {
                 const result = this._optimizer.tune(this._currentParams);
 
@@ -241,13 +239,6 @@ class NullEinspeisungAgent extends utils.Adapter {
             this.setStateAsync('Tuning.LetzterGrund',     { val: reason, ack: true }),
             this.setStateAsync('Tuning.AnzahlAenderungen', { val: this._tuneCount, ack: true }),
         ]);
-    }
-
-    /** Gibt true zurück wenn der Agent aktiv ist (Hauptschalter). */
-    _isActive() {
-        // Der Datenpunkt Aktiv wird beim onReady auf true gesetzt (def: true in io-package).
-        // Für einfache Abfrage: wir lesen ihn synchron aus dem internen Cache.
-        return true; // TODO: async state read im onReady + _active flag setzen
     }
 
     /** Promise-Wrapper für adapter.sendTo */
