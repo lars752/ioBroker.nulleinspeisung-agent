@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "news": {
       "1.0.0": {
-        "en": "Initial release: deterministic optimisation loop with LLM hook for unknown situations",
-        "de": "Erstveröffentlichung: deterministischer Optimierungsloop mit LLM-Hook fuer unbekannte Situationen"
+        "en": "Initial release: deterministic optimisation loop for autonomous parameter tuning",
+        "de": "Erstveröffentlichung: deterministischer Optimierungsloop fuer autonome Parameteranpassung"
       }
     },
     "titleLang": {
@@ -13,8 +13,8 @@
       "de": "Nulleinspeisung Agent"
     },
     "desc": {
-      "en": "Observes the nulleinspeisung adapter and autonomously tunes its parameters to minimise grid import; calls an LLM when deterministic rules are insufficient",
-      "de": "Beobachtet den Nulleinspeisung-Adapter und passt dessen Parameter autonom an, um Netzbezug zu minimieren; ruft ein LLM bei unbekannten Situationen"
+      "en": "Observes the nulleinspeisung adapter and autonomously tunes its parameters to minimise grid import using deterministic rules",
+      "de": "Beobachtet den Nulleinspeisung-Adapter und passt dessen Parameter autonom an, um Netzbezug zu minimieren"
     },
     "authors": [
       "Lars"
@@ -58,10 +58,6 @@
     "observeIntervalS": 60,
     "tuneIntervalS": 300,
     "gridImportThresholdWh": 5,
-    "llmEnabled": false,
-    "llmApiKey": "",
-    "llmModel": "claude-haiku-4-5",
-    "llmTriggerAfterTuneAttempts": 3,
     "allowedParams": [
       "deadBandWatts",
       "regulatorIntervalMs",
@@ -173,32 +169,6 @@
         "read": true,
         "write": false,
         "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "LLM.Letzter_Aufruf",
-      "type": "state",
-      "common": {
-        "role": "text",
-        "name": "Letzter LLM-Kontext (Eingabe)",
-        "type": "string",
-        "read": true,
-        "write": false,
-        "def": ""
-      },
-      "native": {}
-    },
-    {
-      "_id": "LLM.Letzte_Antwort",
-      "type": "state",
-      "common": {
-        "role": "text",
-        "name": "Letzte LLM-Antwort",
-        "type": "string",
-        "read": true,
-        "write": false,
-        "def": ""
       },
       "native": {}
     }

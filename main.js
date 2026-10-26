@@ -14,14 +14,12 @@
 
 const utils   = require('@iobroker/adapter-core');
 const { Optimizer } = require('./lib/optimizer');
-const { LlmHook }   = require('./lib/llm-hook');
 
 class NullEinspeisungAgent extends utils.Adapter {
     constructor(options) {
         super({ ...options, name: 'nulleinspeisung-agent' });
 
         this._optimizer    = null;
-        this._llmHook      = null;
         this._observeTimer = null;
         this._tuneTimer    = null;
         this._currentParams = {};   // letzter bekannter Parametersatz der Ziel-Instanz
@@ -53,16 +51,6 @@ class NullEinspeisungAgent extends utils.Adapter {
             importThresholdWh: cfg.gridImportThresholdWh || 5,
             log: this.log,
         });
-
-        // LLM-Hook (nur wenn aktiviert)
-        if (cfg.llmEnabled && cfg.llmApiKey) {
-            this._llmHook = new LlmHook({
-                apiKey: cfg.llmApiKey,
-                model:  cfg.llmModel || 'claude-haiku-4-5',
-                log:    this.log,
-            });
-            this.log.info(`LLM-Fallback aktiv: ${cfg.llmModel}`);
-        }
 
         // Aktuellen Parametersatz der Zielinstanz laden
         await this._loadCurrentParams(target);
@@ -153,13 +141,8 @@ class NullEinspeisungAgent extends utils.Adapter {
                 }
 
                 if (!result.confident) {
-                    // Deterministik am Ende — LLM fragen?
+                    this.log.warn(`[Tune] Kein deterministischer Schritt moeglich: ${result.reason}`);
                     this._optimizer.markOutcome(false);
-                    if (this._llmHook && this._optimizer.shouldCallLlm(cfg.llmTriggerAfterTuneAttempts || 3)) {
-                        await this._callLlm(target, cfg);
-                    } else {
-                        this.log.warn(`[Tune] Kein deterministischer Schritt: ${result.reason}`);
-                    }
                     this._optimizer.reset();
                     return;
                 }
@@ -175,28 +158,6 @@ class NullEinspeisungAgent extends utils.Adapter {
         };
 
         this._tuneTimer = setInterval(tick, intervalS * 1000);
-    }
-
-    // ------------------------------------------------------------------ //
-    // LLM-Fallback
-    // ------------------------------------------------------------------ //
-
-    async _callLlm(target, cfg) {
-        this.log.info('[LLM] Deterministik erschöpft — frage das LLM');
-        const context = this._optimizer.buildLlmContext(this._currentParams);
-        const contextJson = JSON.stringify(context);
-
-        await this.setStateAsync('LLM.Letzter_Aufruf', { val: contextJson, ack: true });
-
-        const result = await this._llmHook.call(context);
-
-        if (!result) {
-            await this.setStateAsync('LLM.Letzte_Antwort', { val: 'Kein Ergebnis', ack: true });
-            return;
-        }
-
-        await this.setStateAsync('LLM.Letzte_Antwort', { val: JSON.stringify(result), ack: true });
-        await this._applyParams(target, result.params, `[LLM] ${result.reason}`, cfg.dryRun);
     }
 
     // ------------------------------------------------------------------ //
