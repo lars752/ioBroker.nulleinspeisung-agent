@@ -1,0 +1,219 @@
+{
+  "common": {
+    "name": "nulleinspeisung-agent",
+    "version": "1.0.0",
+    "news": {
+      "1.0.0": {
+        "en": "Initial release: deterministic optimisation loop with LLM hook for unknown situations",
+        "de": "Erstveröffentlichung: deterministischer Optimierungsloop mit LLM-Hook fuer unbekannte Situationen"
+      }
+    },
+    "titleLang": {
+      "en": "Zero feed-in agent",
+      "de": "Nulleinspeisung Agent"
+    },
+    "desc": {
+      "en": "Observes the nulleinspeisung adapter and autonomously tunes its parameters to minimise grid import; calls an LLM when deterministic rules are insufficient",
+      "de": "Beobachtet den Nulleinspeisung-Adapter und passt dessen Parameter autonom an, um Netzbezug zu minimieren; ruft ein LLM bei unbekannten Situationen"
+    },
+    "authors": [
+      "Lars"
+    ],
+    "keywords": [
+      "zero feed-in",
+      "pv",
+      "battery",
+      "agent",
+      "optimisation"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "nulleinspeisung-agent.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/lars752/ioBroker.nulleinspeisung-agent/main/admin/nulleinspeisung-agent.png",
+    "readme": "https://github.com/lars752/ioBroker.nulleinspeisung-agent/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "energy",
+    "compact": false,
+    "connectionType": "local",
+    "dataSource": "push",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.12.2"
+      }
+    ]
+  },
+  "native": {
+    "targetInstance": "nulleinspeisung.0",
+    "observeIntervalS": 60,
+    "tuneIntervalS": 300,
+    "gridImportThresholdWh": 5,
+    "llmEnabled": false,
+    "llmApiKey": "",
+    "llmModel": "claude-haiku-4-5",
+    "llmTriggerAfterTuneAttempts": 3,
+    "allowedParams": [
+      "deadBandWatts",
+      "regulatorIntervalMs",
+      "maxLatencyTimeoutS",
+      "latencyToleranceW",
+      "feedForwardEnabled",
+      "peakDetectionThresholdW",
+      "estimatedDutyCycle",
+      "tactPauseTimeoutMs"
+    ],
+    "dryRun": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": { "name": "Information" },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Verbindung zum Nulleinspeisung-Adapter aktiv",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "Aktiv",
+      "type": "state",
+      "common": {
+        "role": "switch",
+        "name": "Agent aktiv (Hauptschalter)",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "Metrik.NetzbezugWh",
+      "type": "state",
+      "common": {
+        "role": "value.energy",
+        "name": "Kumulierter Netzbezug seit letztem Reset (Wh)",
+        "type": "number",
+        "unit": "Wh",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "Metrik.EinspeisungWh",
+      "type": "state",
+      "common": {
+        "role": "value.energy",
+        "name": "Kumulierte Einspeisung seit letztem Reset (Wh)",
+        "type": "number",
+        "unit": "Wh",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "Metrik.RegelabweichungWs",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Integral der Regelabweichung (Ws, Bezug positiv)",
+        "type": "number",
+        "unit": "Ws",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "Tuning.LetzteAenderung",
+      "type": "state",
+      "common": {
+        "role": "text",
+        "name": "Letzte Parameteranpassung (JSON)",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "Tuning.LetzterGrund",
+      "type": "state",
+      "common": {
+        "role": "text",
+        "name": "Begruendung der letzten Anpassung",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "Tuning.AnzahlAenderungen",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Anzahl autonomer Parameteranpassungen (gesamt)",
+        "type": "number",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "LLM.Letzter_Aufruf",
+      "type": "state",
+      "common": {
+        "role": "text",
+        "name": "Letzter LLM-Kontext (Eingabe)",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "LLM.Letzte_Antwort",
+      "type": "state",
+      "common": {
+        "role": "text",
+        "name": "Letzte LLM-Antwort",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    }
+  ]
+}

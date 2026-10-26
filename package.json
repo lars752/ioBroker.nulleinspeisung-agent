@@ -1,0 +1,41 @@
+{
+  "name": "iobroker.nulleinspeisung-agent",
+  "version": "1.0.0",
+  "description": "Beobachtet den Nulleinspeisung-Adapter und passt dessen Parameter autonom an (deterministisch + LLM-Fallback)",
+  "author": "Lars",
+  "license": "MIT",
+  "homepage": "https://github.com/lars752/ioBroker.nulleinspeisung-agent",
+  "keywords": [
+    "ioBroker",
+    "nulleinspeisung",
+    "agent",
+    "optimisation",
+    "pv",
+    "battery"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lars752/ioBroker.nulleinspeisung-agent.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.2.3"
+  },
+  "main": "main.js",
+  "files": [
+    "admin/",
+    "lib/",
+    "main.js",
+    "io-package.json",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node -e \"require('./lib/optimizer'); require('./lib/llm-hook'); console.log('OK')\""
+  },
+  "bugs": {
+    "url": "https://github.com/lars752/ioBroker.nulleinspeisung-agent/issues"
+  },
+  "readmeFilename": "README.md"
+}
