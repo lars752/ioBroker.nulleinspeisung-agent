@@ -16,16 +16,10 @@
           "default": "nulleinspeisung.0"
         },
         "divider1": { "type": "divider" },
-        "Aktiv_label": {
-          "type": "staticText",
-          "text": "Den Hauptschalter (Aktiv) findest du als Datenpunkt nulleinspeisung-agent.0.Aktiv",
-          "style": { "fontStyle": "italic", "color": "#888" }
-        },
-        "divider2": { "type": "divider" },
         "observeIntervalS": {
           "type": "number",
           "label": "Beobachtungsintervall (s)",
-          "help": "Wie oft werden Messwerte eingelesen (Sekunden)?",
+          "help": "Wie oft liest der Agent den Zaehler- und Sollwert ein. Kuerzer = feinere Metrik, hoehere Last.",
           "min": 10,
           "max": 300,
           "step": 5,
@@ -36,7 +30,7 @@
         "tuneIntervalS": {
           "type": "number",
           "label": "Tuning-Intervall (s)",
-          "help": "Wie oft prueft der Agent ob eine Parameteranpassung noetig ist?",
+          "help": "Wie oft prueft der Agent ob eine Parameteranpassung noetig ist. Kuerzer = aggressiveres Eingreifen.",
           "min": 60,
           "max": 3600,
           "step": 60,
@@ -47,7 +41,7 @@
         "gridImportThresholdWh": {
           "type": "number",
           "label": "Netzbezugs-Schwelle (Wh)",
-          "help": "Ab wieviel Wh akkumuliertem Netzbezug wird optimiert?",
+          "help": "Ab wieviel Wh akkumuliertem Netzbezug (zwischen zwei Tuning-Laeufen) greift der Agent ein.",
           "min": 1,
           "max": 100,
           "step": 1,
@@ -55,9 +49,11 @@
           "sm": 12,
           "md": 4
         },
+        "divider2": { "type": "divider" },
         "dryRun": {
           "type": "checkbox",
-          "label": "Trockenlauf (nur protokollieren, keine Werte schreiben)",
+          "label": "Trockenlauf — nur protokollieren, keine Werte schreiben",
+          "help": "Im Trockenlauf berechnet der Agent Anpassungen und loggt sie, schreibt aber nichts in den Nulleinspeisung-Adapter. Zum sicheren Testen.",
           "default": false,
           "sm": 12
         }
@@ -67,122 +63,122 @@
       "type": "tab",
       "label": "Erlaubte Parameter",
       "items": {
-        "info_text": {
+        "info_intro": {
           "type": "staticText",
-          "text": "Welche Parameter darf der Agent autonom veraendern? Nur aktivierte Parameter werden angefasst.",
-          "style": { "marginBottom": "16px" }
+          "text": "Aktiviere nur Parameter, in die der Agent autonom eingreifen darf. Deaktivierte Parameter werden nie veraendert.",
+          "style": { "marginBottom": "8px", "fontStyle": "italic", "color": "#888" }
+        },
+        "divider_db": { "type": "divider" },
+        "desc_deadBandWatts": {
+          "type": "staticText",
+          "text": "deadBandWatts — Totband: Bereich um 0 W, in dem der Regler nichts tut. Zu klein → Schwingung. Zu gross → dauerhafter Netzbezug. Der Agent verkleinert diesen Wert bei anhaltendem Netzbezug und vergroessert ihn bei Schwingungen.",
+          "style": { "marginBottom": "4px" }
         },
         "allowed_deadBandWatts": {
           "type": "checkbox",
-          "label": "deadBandWatts — Totband (W)",
-          "help": "Bereich um 0 W in dem nicht geregelt wird",
+          "label": "deadBandWatts anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 0,
           "default": true,
           "sm": 12
         },
+        "divider_ri": { "type": "divider" },
+        "desc_regulatorIntervalMs": {
+          "type": "staticText",
+          "text": "regulatorIntervalMs — Regler-Intervall: Wie oft (in ms) der Regelkreis die Wechselrichter-Sollwerte neu berechnet. Zu gross → langsame Reaktion auf Lastsprunge. Zu klein → unnoetig viele Schreibzugriffe. Der Agent verkleinert diesen Wert wenn der Netzbezug trotz kleinem Totband anhalt.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_regulatorIntervalMs": {
           "type": "checkbox",
-          "label": "regulatorIntervalMs — Regler-Intervall (ms)",
-          "help": "Wie oft laeuft der Regelkreis",
+          "label": "regulatorIntervalMs anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 1,
           "default": true,
           "sm": 12
         },
+        "divider_lt": { "type": "divider" },
+        "desc_maxLatencyTimeoutS": {
+          "type": "staticText",
+          "text": "maxLatencyTimeoutS — Latenz-Timeout: Maximale Zeit (in s) die der Regler auf die Rueckmeldung eines Wechselrichters wartet bevor er den naechsten Schritt berechnet. Zu kurz → Integral-Windup bei traegen Geraeten. Zu lang → Regelung blockiert.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_maxLatencyTimeoutS": {
           "type": "checkbox",
-          "label": "maxLatencyTimeoutS — Latenz-Timeout (s)",
+          "label": "maxLatencyTimeoutS anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 2,
           "default": true,
           "sm": 12
         },
+        "divider_lw": { "type": "divider" },
+        "desc_latencyToleranceW": {
+          "type": "staticText",
+          "text": "latencyToleranceW — Latenz-Toleranz: Mindestabweichung in W die ein Wechselrichter erreicht haben muss damit seine Latenz als 'fertig' gilt. Zu gross → Regler laeuft weiter obwohl das Geraet noch arbeitet. Zu klein → Timeout bei normalen Messrauschen.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_latencyToleranceW": {
           "type": "checkbox",
-          "label": "latencyToleranceW — Latenz-Toleranz (W)",
+          "label": "latencyToleranceW anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 3,
           "default": true,
           "sm": 12
         },
+        "divider_ff": { "type": "divider" },
+        "desc_feedForwardEnabled": {
+          "type": "staticText",
+          "text": "feedForwardEnabled — Vorsteuerung: Erkennt getaktete Lasten (z. B. Waschmaschine, Herd) und erhoet den Sollwert praektiv bevor der Zaehler ausschlaegt. Reduziert Netzbezugsspitzen. Der Agent kann diese Funktion deaktivieren wenn sie Fehlalarme ausloest.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_feedForwardEnabled": {
           "type": "checkbox",
-          "label": "feedForwardEnabled — Vorsteuerung aktiv",
+          "label": "feedForwardEnabled anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 4,
           "default": false,
           "sm": 12
         },
+        "divider_pk": { "type": "divider" },
+        "desc_peakDetectionThresholdW": {
+          "type": "staticText",
+          "text": "peakDetectionThresholdW — Spitzen-Erkennungsschwelle: Ab welcher Leistung (W) der Regler einen Lastsprung als 'Spitze' erkennt und die Vorsteuerung aktiviert. Zu niedrig → haeufige Fehlausloesung. Zu hoch → Spitzen werden verpasst.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_peakDetectionThresholdW": {
           "type": "checkbox",
-          "label": "peakDetectionThresholdW — Spitzen-Erkennungsschwelle (W)",
+          "label": "peakDetectionThresholdW anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 5,
           "default": false,
           "sm": 12
         },
+        "divider_dc": { "type": "divider" },
+        "desc_estimatedDutyCycle": {
+          "type": "staticText",
+          "text": "estimatedDutyCycle — Duty-Cycle: Geschaetzter Einschaltanteil (0–1) einer getakteten Last. Bestimmt wie stark die Vorsteuerung den Sollwert erhoet. 0.5 = Last ist im Mittel halb so hoch wie ihr Peak.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_estimatedDutyCycle": {
           "type": "checkbox",
-          "label": "estimatedDutyCycle — Geschaetzter Duty-Cycle (0-1)",
+          "label": "estimatedDutyCycle anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 6,
           "default": false,
           "sm": 12
         },
+        "divider_tp": { "type": "divider" },
+        "desc_tactPauseTimeoutMs": {
+          "type": "staticText",
+          "text": "tactPauseTimeoutMs — Takt-Pause-Timeout: Wie lange (ms) der Regler nach einem Spitzen-Ende wartet bevor er den Sollwert wieder absenkt. Zu kurz → Regler senkt zu frueh ab und der naechste Takt zieht wieder Strom aus dem Netz.",
+          "style": { "marginBottom": "4px" }
+        },
         "allowed_tactPauseTimeoutMs": {
           "type": "checkbox",
-          "label": "tactPauseTimeoutMs — Takt-Pause-Timeout (ms)",
+          "label": "tactPauseTimeoutMs anpassen erlauben",
           "attr": "allowedParams",
           "arrayIndex": 7,
           "default": false,
           "sm": 12
-        }
-      }
-    },
-    "tab_llm": {
-      "type": "tab",
-      "label": "LLM-Fallback",
-      "items": {
-        "llmEnabled": {
-          "type": "checkbox",
-          "label": "LLM-Fallback aktivieren (Claude API)",
-          "help": "Das LLM springt ein wenn der deterministische Optimizer nicht weiterkommt",
-          "default": false,
-          "sm": 12
-        },
-        "llmApiKey": {
-          "type": "password",
-          "label": "Anthropic API Key",
-          "help": "Nur benoetigt wenn LLM-Fallback aktiv. Beginnt mit 'sk-ant-...'",
-          "default": "",
-          "sm": 12,
-          "md": 8,
-          "hidden": { "!llmEnabled": true }
-        },
-        "llmModel": {
-          "type": "select",
-          "label": "Claude-Modell",
-          "default": "claude-haiku-4-5",
-          "options": [
-            { "value": "claude-haiku-4-5",  "label": "claude-haiku-4-5 (schnell, guenstig)" },
-            { "value": "claude-sonnet-4-5", "label": "claude-sonnet-4-5 (ausgewogen)" }
-          ],
-          "sm": 12,
-          "md": 4,
-          "hidden": { "!llmEnabled": true }
-        },
-        "llmTriggerAfterTuneAttempts": {
-          "type": "number",
-          "label": "LLM nach N fehlgeschlagenen Tuning-Versuchen",
-          "help": "Wieviele erfolglose deterministische Anpassungen bevor das LLM gefragt wird?",
-          "min": 1,
-          "max": 20,
-          "step": 1,
-          "default": 3,
-          "sm": 12,
-          "md": 4,
-          "hidden": { "!llmEnabled": true }
         }
       }
     }
