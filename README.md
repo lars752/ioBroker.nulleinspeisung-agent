@@ -73,6 +73,10 @@ Hinweis: Ein Mindest-SoC von 70 % setzt die Wechselrichter auf 0 W, das BMS blei
 | `Statistik.Heute.*`, `Statistik.Gestern.*` | PV-Ertrag, Ladung, Entladung in kWh |
 | `Statistik.Verlauf` | Tagesverlauf als JSON (60 Tage) |
 
+### Schreibzugriffe
+
+Datenpunkte werden nur bei Änderung geschrieben. Intern integriert der Agent alle 30 s, veröffentlicht `Statistik.Heute.*` aber nur alle 5 min. `SoC.*`, `Prognose.*` und `Modell.*` werden im Planungstakt (10 min) geprüft. `Statistik.Verlauf` wird stündlich, beim Tageswechsel und beim Stoppen gesichert; nach einem Absturz fehlt höchstens eine Stunde des laufenden Tags.
+
 ## Parameter-Tuning
 
 Der Agent liest im Beobachtungsintervall den Zähler- und Sollwert der Nulleinspeisung und prüft im Tuning-Intervall:

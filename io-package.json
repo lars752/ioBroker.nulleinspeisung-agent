@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nulleinspeisung-agent",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "news": {
+      "1.1.2": {
+        "en": "Fewer writes: states only written on change, daily statistics published every 5 min, history saved hourly",
+        "de": "Weniger Schreibzugriffe: Datenpunkte nur bei Aenderung, Tagesstatistik alle 5 min, Verlauf stuendlich gesichert"
+      },
       "1.1.1": {
         "en": "Energy groups: power column in watts (PV = Wp, charger = max. W) instead of kWp limited to 1000; charger power limits the simulated charge per hour",
         "de": "Energiegruppen: Leistungsspalte in Watt (PV = Wp, Lader = max. W) statt auf 1000 begrenzter kWp; die Laderleistung begrenzt die simulierte Ladung pro Stunde"

@@ -137,9 +137,9 @@ class NullEinspeisungAgent extends utils.Adapter {
 
                 // Metriken in Datenpunkte schreiben
                 await Promise.all([
-                    this.setStateAsync('Metrik.NetzbezugWh',    { val: Math.round(this._optimizer.importWh * 100) / 100, ack: true }),
-                    this.setStateAsync('Metrik.EinspeisungWh',  { val: Math.round(this._optimizer.exportWh * 100) / 100, ack: true }),
-                    this.setStateAsync('Metrik.RegelabweichungWs', { val: Math.round(this._optimizer.errorWs), ack: true }),
+                    this.setStateChangedAsync('Metrik.NetzbezugWh',    { val: Math.round(this._optimizer.importWh * 100) / 100, ack: true }),
+                    this.setStateChangedAsync('Metrik.EinspeisungWh',  { val: Math.round(this._optimizer.exportWh * 100) / 100, ack: true }),
+                    this.setStateChangedAsync('Metrik.RegelabweichungWs', { val: Math.round(this._optimizer.errorWs), ack: true }),
                 ]);
             } catch (err) {
                 this.log.debug(`[Observe] Fehler: ${err.message}`);
