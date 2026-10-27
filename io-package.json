@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nulleinspeisung-agent",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "SoC control by weather forecast: own energy statistics, Open-Meteo PV forecast, learning battery model and seasonal park SoC; minimum SoC is handed to nulleinspeisung (>= 1.0.9) in the evening and morning",
+        "de": "SoC-Steuerung per Wetterprognose: eigene Energiestatistik, PV-Prognose von Open-Meteo, lernendes Akkumodell und saisonaler Park-SoC; der Mindest-SoC wird abends und morgens an die Nulleinspeisung (ab 1.0.9) uebergeben"
+      },
       "1.0.0": {
         "en": "Initial release: deterministic optimisation loop for autonomous parameter tuning",
         "de": "Erstveröffentlichung: deterministischer Optimierungsloop fuer autonome Parameteranpassung"
@@ -13,8 +17,8 @@
       "de": "Nulleinspeisung Agent"
     },
     "desc": {
-      "en": "Observes the nulleinspeisung adapter and autonomously tunes its parameters to minimise grid import using deterministic rules",
-      "de": "Beobachtet den Nulleinspeisung-Adapter und passt dessen Parameter autonom an, um Netzbezug zu minimieren"
+      "en": "Observes the nulleinspeisung adapter, tunes its parameters and controls the minimum battery SoC based on the weather forecast",
+      "de": "Beobachtet den Nulleinspeisung-Adapter, passt dessen Parameter autonom an und steuert den Mindest-SoC per Wetterprognose"
     },
     "authors": [
       "Lars"
@@ -37,7 +41,7 @@
     "mode": "daemon",
     "type": "energy",
     "compact": false,
-    "connectionType": "local",
+    "connectionType": "cloud",
     "dataSource": "push",
     "adminUI": {
       "config": "json"
@@ -51,7 +55,8 @@
       {
         "admin": ">=6.12.2"
       }
-    ]
+    ],
+    "messagebox": true
   },
   "native": {
     "targetInstance": "nulleinspeisung.0",
@@ -68,14 +73,38 @@
       "estimatedDutyCycle",
       "tactPauseTimeoutMs"
     ],
-    "dryRun": false
+    "dryRun": false,
+    "socEnabled": false,
+    "socId": "growatt-bms.0.bms.SoC",
+    "capacityKWh": 5.12,
+    "socMinPercent": 20,
+    "parkSummerPercent": 20,
+    "parkWinterPercent": 70,
+    "refillPercent": 80,
+    "hysteresisPercent": 5,
+    "minLearningDays": 7,
+    "plz": "",
+    "country": "DE",
+    "latitude": 0,
+    "longitude": 0,
+    "tilt": 32,
+    "azimuth": 0,
+    "performanceRatio": 0.85,
+    "energyGroups": [],
+    "defaultChargeFactor": 0.8,
+    "defaultBaseLoadKWh": 3,
+    "defaultDischargeKWh": 3,
+    "chargeEfficiency": 0.92,
+    "dischargeEfficiency": 0.92
   },
   "objects": [],
   "instanceObjects": [
     {
       "_id": "info",
       "type": "channel",
-      "common": { "name": "Information" },
+      "common": {
+        "name": "Information"
+      },
       "native": {}
     },
     {

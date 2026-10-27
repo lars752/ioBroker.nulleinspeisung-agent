@@ -9,11 +9,15 @@
  * Architektur:
  *   observe-Loop  (observeIntervalS)  → liest Zähler + Sollwert, buchts beim Optimizer ein
  *   tune-Loop     (tuneIntervalS)     → Optimizer.tune() → bei Bedarf sendTo setConfig
- *   LLM-Hook      (bei N Fehlversuchen) → buildLlmContext() → LlmHook.call() → sendTo setConfig
+ *   SoC-Steuerung (lib/soccontroller.js) → Energiestatistik + Wetterprognose → Mindest-SoC
+ *                 der Nulleinspeisung zu den Entscheidungszeitpunkten (Abend/Morgen)
  */
 
 const utils   = require('@iobroker/adapter-core');
 const { Optimizer } = require('./lib/optimizer');
+const { SocController } = require('./lib/soccontroller');
+
+const SENDTO_TIMEOUT_MS = 10_000;
 
 class NullEinspeisungAgent extends utils.Adapter {
     constructor(options) {
@@ -24,10 +28,12 @@ class NullEinspeisungAgent extends utils.Adapter {
         this._tuneTimer    = null;
         this._currentParams = {};   // letzter bekannter Parametersatz der Ziel-Instanz
         this._tuneCount    = 0;
+        this._soc          = null;  // SoC-Steuerung per Wetterprognose
 
         this.on('ready',       this._onReady.bind(this));
         this.on('stateChange', this._onStateChange.bind(this));
         this.on('unload',      this._onUnload.bind(this));
+        this.on('message',     this._onMessage.bind(this));
     }
 
     // ------------------------------------------------------------------ //
@@ -68,6 +74,25 @@ class NullEinspeisungAgent extends utils.Adapter {
         // Loops starten
         this._startObserveLoop(cfg.observeIntervalS || 60, target);
         this._startTuneLoop(cfg.tuneIntervalS || 300, target, cfg);
+
+        // SoC-Steuerung per Wetterprognose
+        try {
+            this._soc = new SocController(this, target, cfg.dryRun);
+            await this._soc.start();
+        } catch (err) {
+            this.log.error(`[SoC] Start fehlgeschlagen: ${err.message}`);
+        }
+    }
+
+    /** Nachrichten der Admin-Oberfläche: Gruppen-Scan für die SoC-Steuerung. */
+    _onMessage(obj) {
+        if (!obj || !obj.command || !obj.callback) return;
+        if (obj.command === 'scanGroups') {
+            const msg = obj.message || {};
+            SocController.scanGroups(this, msg.energyGroups)
+                .then((rows) => this.sendTo(obj.from, obj.command, { native: { energyGroups: rows } }, obj.callback))
+                .catch((e) => this.sendTo(obj.from, obj.command, { error: `Fehler: ${e.message}` }, obj.callback));
+        }
     }
 
     _onStateChange(id, state) {
@@ -84,6 +109,7 @@ class NullEinspeisungAgent extends utils.Adapter {
         try {
             if (this._observeTimer) clearInterval(this._observeTimer);
             if (this._tuneTimer)    clearInterval(this._tuneTimer);
+            if (this._soc)          await this._soc.stop();
             await this.setStateAsync('info.connection', { val: false, ack: true });
         } catch { /* ignore */ }
         callback();
@@ -202,10 +228,12 @@ class NullEinspeisungAgent extends utils.Adapter {
         ]);
     }
 
-    /** Promise-Wrapper für adapter.sendTo */
+    /** Promise-Wrapper für adapter.sendTo (mit Timeout, falls die Zielinstanz nicht läuft) */
     _sendToAsync(instance, command, data) {
         return new Promise((resolve, reject) => {
+            const timer = setTimeout(() => reject(new Error(`${instance} antwortet nicht auf ${command}`)), SENDTO_TIMEOUT_MS);
             this.sendTo(instance, command, data, (result) => {
+                clearTimeout(timer);
                 if (result && result.error) reject(new Error(result.error));
                 else resolve(result);
             });

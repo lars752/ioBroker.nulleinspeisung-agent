@@ -15,7 +15,9 @@
           "md": 6,
           "default": "nulleinspeisung.0"
         },
-        "divider1": { "type": "divider" },
+        "divider1": {
+          "type": "divider"
+        },
         "observeIntervalS": {
           "type": "number",
           "label": "Beobachtungsintervall (s)",
@@ -49,7 +51,9 @@
           "sm": 12,
           "md": 4
         },
-        "divider2": { "type": "divider" },
+        "divider2": {
+          "type": "divider"
+        },
         "dryRun": {
           "type": "checkbox",
           "label": "Trockenlauf — nur protokollieren, keine Werte schreiben",
@@ -66,13 +70,21 @@
         "info_intro": {
           "type": "staticText",
           "text": "Aktiviere nur Parameter, in die der Agent autonom eingreifen darf. Deaktivierte Parameter werden nie veraendert.",
-          "style": { "marginBottom": "8px", "fontStyle": "italic", "color": "#888" }
+          "style": {
+            "marginBottom": "8px",
+            "fontStyle": "italic",
+            "color": "#888"
+          }
         },
-        "divider_db": { "type": "divider" },
+        "divider_db": {
+          "type": "divider"
+        },
         "desc_deadBandWatts": {
           "type": "staticText",
           "text": "deadBandWatts — Totband: Bereich um 0 W, in dem der Regler nichts tut. Zu klein → Schwingung. Zu gross → dauerhafter Netzbezug. Der Agent verkleinert diesen Wert bei anhaltendem Netzbezug und vergroessert ihn bei Schwingungen.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_deadBandWatts": {
           "type": "checkbox",
@@ -82,11 +94,15 @@
           "default": true,
           "sm": 12
         },
-        "divider_ri": { "type": "divider" },
+        "divider_ri": {
+          "type": "divider"
+        },
         "desc_regulatorIntervalMs": {
           "type": "staticText",
           "text": "regulatorIntervalMs — Regler-Intervall: Wie oft (in ms) der Regelkreis die Wechselrichter-Sollwerte neu berechnet. Zu gross → langsame Reaktion auf Lastsprunge. Zu klein → unnoetig viele Schreibzugriffe. Der Agent verkleinert diesen Wert wenn der Netzbezug trotz kleinem Totband anhalt.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_regulatorIntervalMs": {
           "type": "checkbox",
@@ -96,11 +112,15 @@
           "default": true,
           "sm": 12
         },
-        "divider_lt": { "type": "divider" },
+        "divider_lt": {
+          "type": "divider"
+        },
         "desc_maxLatencyTimeoutS": {
           "type": "staticText",
           "text": "maxLatencyTimeoutS — Latenz-Timeout: Maximale Zeit (in s) die der Regler auf die Rueckmeldung eines Wechselrichters wartet bevor er den naechsten Schritt berechnet. Zu kurz → Integral-Windup bei traegen Geraeten. Zu lang → Regelung blockiert.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_maxLatencyTimeoutS": {
           "type": "checkbox",
@@ -110,11 +130,15 @@
           "default": true,
           "sm": 12
         },
-        "divider_lw": { "type": "divider" },
+        "divider_lw": {
+          "type": "divider"
+        },
         "desc_latencyToleranceW": {
           "type": "staticText",
           "text": "latencyToleranceW — Latenz-Toleranz: Mindestabweichung in W die ein Wechselrichter erreicht haben muss damit seine Latenz als 'fertig' gilt. Zu gross → Regler laeuft weiter obwohl das Geraet noch arbeitet. Zu klein → Timeout bei normalen Messrauschen.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_latencyToleranceW": {
           "type": "checkbox",
@@ -124,11 +148,15 @@
           "default": true,
           "sm": 12
         },
-        "divider_ff": { "type": "divider" },
+        "divider_ff": {
+          "type": "divider"
+        },
         "desc_feedForwardEnabled": {
           "type": "staticText",
           "text": "feedForwardEnabled — Vorsteuerung: Erkennt getaktete Lasten (z. B. Waschmaschine, Herd) und erhoet den Sollwert praektiv bevor der Zaehler ausschlaegt. Reduziert Netzbezugsspitzen. Der Agent kann diese Funktion deaktivieren wenn sie Fehlalarme ausloest.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_feedForwardEnabled": {
           "type": "checkbox",
@@ -138,11 +166,15 @@
           "default": false,
           "sm": 12
         },
-        "divider_pk": { "type": "divider" },
+        "divider_pk": {
+          "type": "divider"
+        },
         "desc_peakDetectionThresholdW": {
           "type": "staticText",
           "text": "peakDetectionThresholdW — Spitzen-Erkennungsschwelle: Ab welcher Leistung (W) der Regler einen Lastsprung als 'Spitze' erkennt und die Vorsteuerung aktiviert. Zu niedrig → haeufige Fehlausloesung. Zu hoch → Spitzen werden verpasst.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_peakDetectionThresholdW": {
           "type": "checkbox",
@@ -152,11 +184,15 @@
           "default": false,
           "sm": 12
         },
-        "divider_dc": { "type": "divider" },
+        "divider_dc": {
+          "type": "divider"
+        },
         "desc_estimatedDutyCycle": {
           "type": "staticText",
           "text": "estimatedDutyCycle — Duty-Cycle: Geschaetzter Einschaltanteil (0–1) einer getakteten Last. Bestimmt wie stark die Vorsteuerung den Sollwert erhoet. 0.5 = Last ist im Mittel halb so hoch wie ihr Peak.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_estimatedDutyCycle": {
           "type": "checkbox",
@@ -166,11 +202,15 @@
           "default": false,
           "sm": 12
         },
-        "divider_tp": { "type": "divider" },
+        "divider_tp": {
+          "type": "divider"
+        },
         "desc_tactPauseTimeoutMs": {
           "type": "staticText",
           "text": "tactPauseTimeoutMs — Takt-Pause-Timeout: Wie lange (ms) der Regler nach einem Spitzen-Ende wartet bevor er den Sollwert wieder absenkt. Zu kurz → Regler senkt zu frueh ab und der naechste Takt zieht wieder Strom aus dem Netz.",
-          "style": { "marginBottom": "4px" }
+          "style": {
+            "marginBottom": "4px"
+          }
         },
         "allowed_tactPauseTimeoutMs": {
           "type": "checkbox",
@@ -179,6 +219,351 @@
           "arrayIndex": 7,
           "default": false,
           "sm": 12
+        }
+      }
+    },
+    "tab_soc": {
+      "type": "tab",
+      "label": "SoC-Prognose",
+      "items": {
+        "_socIntro": {
+          "type": "staticText",
+          "text": "Der Agent haelt den Akku bei angesagter Dunkelflaute auf einem saisonalen Park-SoC und erlaubt die Entladung bis zum Minimum nur, wenn laut Wetterprognose (Open-Meteo, 3 Tage) bald wieder nachgeladen wird. Statistik und Empfehlung laufen immer mit, damit das Modell schon lernt; eingegriffen wird erst, wenn die Steuerung aktiviert ist. Benoetigt Nulleinspeisung ab v1.0.9.",
+          "sm": 12,
+          "style": {
+            "marginBottom": "8px",
+            "fontStyle": "italic"
+          }
+        },
+        "socEnabled": {
+          "type": "checkbox",
+          "label": "SoC-Steuerung aktiv (Mindest-SoC an die Nulleinspeisung uebergeben)",
+          "help": "Aus = nur Statistik und Empfehlung. Der globale Trockenlauf gilt auch hier.",
+          "sm": 12,
+          "default": false
+        },
+        "socId": {
+          "type": "objectId",
+          "label": "SoC-Datenpunkt",
+          "sm": 12,
+          "md": 6,
+          "default": "growatt-bms.0.bms.SoC"
+        },
+        "capacityKWh": {
+          "type": "number",
+          "label": "Akkukapazitaet (kWh)",
+          "min": 0.1,
+          "max": 1000,
+          "step": 0.01,
+          "sm": 6,
+          "md": 3,
+          "default": 5.12
+        },
+        "_hdrSoc": {
+          "type": "header",
+          "text": "Mindest-SoC",
+          "size": 4,
+          "newLine": true
+        },
+        "socMinPercent": {
+          "type": "number",
+          "label": "Minimum (%)",
+          "help": "Tiefste erlaubte Abschaltschwelle bei guter Prognose",
+          "min": 0,
+          "max": 100,
+          "sm": 6,
+          "md": 3,
+          "default": 20
+        },
+        "parkSummerPercent": {
+          "type": "number",
+          "label": "Park-SoC Sommer (%)",
+          "help": "Gilt am 21.6., dazwischen Kosinuskurve",
+          "min": 0,
+          "max": 100,
+          "sm": 6,
+          "md": 3,
+          "default": 20
+        },
+        "parkWinterPercent": {
+          "type": "number",
+          "label": "Park-SoC Winter (%)",
+          "help": "Gilt am 21.12.",
+          "min": 0,
+          "max": 100,
+          "sm": 6,
+          "md": 3,
+          "default": 70
+        },
+        "refillPercent": {
+          "type": "number",
+          "label": "Erholungsschwelle (%)",
+          "help": "Ab diesem SoC gilt der Akku als wieder aufgeladen",
+          "min": 1,
+          "max": 100,
+          "sm": 6,
+          "md": 3,
+          "default": 80
+        },
+        "hysteresisPercent": {
+          "type": "number",
+          "label": "Hysterese (%)",
+          "help": "Kleinere Aenderungen werden nicht uebernommen (Absenken auf das Minimum immer)",
+          "min": 0,
+          "max": 50,
+          "sm": 6,
+          "md": 3,
+          "default": 5
+        },
+        "minLearningDays": {
+          "type": "number",
+          "label": "Lerntage",
+          "help": "Bis dahin gilt nur der Park-SoC (0 = sofort mit Standardwerten planen)",
+          "min": 0,
+          "max": 60,
+          "sm": 6,
+          "md": 3,
+          "default": 7
+        },
+        "_hdrPv": {
+          "type": "header",
+          "text": "Standort und Module",
+          "size": 4,
+          "newLine": true
+        },
+        "plz": {
+          "type": "text",
+          "label": "Postleitzahl",
+          "help": "Wird ueber OpenStreetMap in Koordinaten umgerechnet",
+          "sm": 6,
+          "md": 3,
+          "default": ""
+        },
+        "country": {
+          "type": "text",
+          "label": "Land (ISO-Code)",
+          "sm": 6,
+          "md": 2,
+          "default": "DE"
+        },
+        "latitude": {
+          "type": "number",
+          "label": "Breite (optional)",
+          "help": "0 = aus PLZ bzw. Systemeinstellungen",
+          "min": -90,
+          "max": 90,
+          "step": 0.0001,
+          "sm": 6,
+          "md": 2,
+          "default": 0
+        },
+        "longitude": {
+          "type": "number",
+          "label": "Laenge (optional)",
+          "help": "0 = aus PLZ bzw. Systemeinstellungen",
+          "min": -180,
+          "max": 180,
+          "step": 0.0001,
+          "sm": 6,
+          "md": 2,
+          "default": 0
+        },
+        "tilt": {
+          "type": "number",
+          "label": "Neigung (Grad)",
+          "min": 0,
+          "max": 90,
+          "sm": 6,
+          "md": 3,
+          "default": 32,
+          "newLine": true
+        },
+        "azimuth": {
+          "type": "number",
+          "label": "Azimut (Grad, 0 = Sued, -90 = Ost, 90 = West)",
+          "min": -180,
+          "max": 180,
+          "sm": 6,
+          "md": 4,
+          "default": 0
+        },
+        "performanceRatio": {
+          "type": "number",
+          "label": "Performance Ratio",
+          "help": "Startwert, wird durch die Kalibrierung korrigiert",
+          "min": 0.3,
+          "max": 1.2,
+          "step": 0.01,
+          "sm": 6,
+          "md": 3,
+          "default": 0.85
+        },
+        "_hdrGroups": {
+          "type": "header",
+          "text": "Energiegruppen",
+          "size": 4,
+          "newLine": true
+        },
+        "_groupsHelp": {
+          "type": "staticText",
+          "text": "Rollen: pv = PV-Erzeugung (kWp eintragen), lader = Ladegeraete (Ladung in den Akku), akku = Akku-Wechselrichter (Entladung). Der Scan sucht alle *.info.Total_Power-Datenpunkte; vorhandene Einstellungen bleiben erhalten.",
+          "sm": 12
+        },
+        "_scanGroupsBtn": {
+          "type": "sendTo",
+          "command": "scanGroups",
+          "jsonData": "{\"energyGroups\": ${JSON.stringify(data.energyGroups || [])}}",
+          "useNative": true,
+          "variant": "outlined",
+          "label": {
+            "de": "Gruppen scannen",
+            "en": "Scan groups"
+          },
+          "newLine": true,
+          "sm": 12,
+          "md": 4
+        },
+        "energyGroups": {
+          "type": "table",
+          "label": {
+            "de": "Gruppen",
+            "en": "Groups"
+          },
+          "newLine": true,
+          "sm": 12,
+          "items": [
+            {
+              "type": "checkbox",
+              "attr": "active",
+              "title": {
+                "de": "Aktiv",
+                "en": "Active"
+              },
+              "width": "8%",
+              "default": true
+            },
+            {
+              "type": "text",
+              "attr": "name",
+              "title": {
+                "de": "Name",
+                "en": "Name"
+              },
+              "width": "20%"
+            },
+            {
+              "type": "select",
+              "attr": "role",
+              "title": {
+                "de": "Rolle",
+                "en": "Role"
+              },
+              "width": "14%",
+              "default": "pv",
+              "options": [
+                {
+                  "label": "pv",
+                  "value": "pv"
+                },
+                {
+                  "label": "lader",
+                  "value": "lader"
+                },
+                {
+                  "label": "akku",
+                  "value": "akku"
+                },
+                {
+                  "label": "ignorieren",
+                  "value": "ignorieren"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "attr": "powerId",
+              "title": {
+                "de": "Leistungs-Datenpunkt (W)",
+                "en": "Power data point (W)"
+              },
+              "width": "44%"
+            },
+            {
+              "type": "number",
+              "attr": "kwp",
+              "title": {
+                "de": "kWp",
+                "en": "kWp"
+              },
+              "width": "14%",
+              "default": 0,
+              "min": 0,
+              "max": 1000,
+              "step": 0.01
+            }
+          ]
+        },
+        "_hdrModel": {
+          "type": "header",
+          "text": "Startwerte des Modells",
+          "size": 4,
+          "newLine": true
+        },
+        "_modelHelp": {
+          "type": "staticText",
+          "text": "Gelten, bis genug Tage gelernt sind. Ladung pro Tag = Ladefaktor x (PV-Ertrag - Grundlast).",
+          "sm": 12
+        },
+        "defaultChargeFactor": {
+          "type": "number",
+          "label": "Ladefaktor",
+          "min": 0.05,
+          "max": 1.2,
+          "step": 0.01,
+          "sm": 6,
+          "md": 3,
+          "default": 0.8
+        },
+        "defaultBaseLoadKWh": {
+          "type": "number",
+          "label": "Grundlast tagsueber (kWh)",
+          "min": 0,
+          "max": 100,
+          "step": 0.1,
+          "sm": 6,
+          "md": 3,
+          "default": 3
+        },
+        "defaultDischargeKWh": {
+          "type": "number",
+          "label": "Entladung je Tag (kWh)",
+          "min": 0,
+          "max": 100,
+          "step": 0.1,
+          "sm": 6,
+          "md": 3,
+          "default": 3
+        },
+        "chargeEfficiency": {
+          "type": "number",
+          "label": "Wirkungsgrad Laden",
+          "min": 0.5,
+          "max": 1,
+          "step": 0.01,
+          "sm": 6,
+          "md": 3,
+          "default": 0.92,
+          "newLine": true
+        },
+        "dischargeEfficiency": {
+          "type": "number",
+          "label": "Wirkungsgrad Entladen",
+          "min": 0.5,
+          "max": 1,
+          "step": 0.01,
+          "sm": 6,
+          "md": 3,
+          "default": 0.92
         }
       }
     }
