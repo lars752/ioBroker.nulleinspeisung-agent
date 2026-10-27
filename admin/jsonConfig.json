@@ -406,7 +406,7 @@
         },
         "_groupsHelp": {
           "type": "staticText",
-          "text": "Rollen: pv = PV-Erzeugung (kWp eintragen), lader = Ladegeraete (Ladung in den Akku), akku = Akku-Wechselrichter (Entladung). Der Scan sucht alle *.info.Total_Power-Datenpunkte; vorhandene Einstellungen bleiben erhalten.",
+          "text": "Rollen: pv = PV-Erzeugung (Peakleistung in Wp eintragen), lader = Ladegeraete (maximale Ladeleistung in W, begrenzt die simulierte Ladung pro Stunde; 0 = unbegrenzt), akku = Akku-Wechselrichter (Entladung, Leistungsspalte ohne Bedeutung). Der Scan sucht alle *.info.Total_Power-Datenpunkte; vorhandene Einstellungen bleiben erhalten.",
           "sm": 12
         },
         "_scanGroupsBtn": {
@@ -490,16 +490,16 @@
             },
             {
               "type": "number",
-              "attr": "kwp",
+              "attr": "watt",
               "title": {
-                "de": "kWp",
-                "en": "kWp"
+                "de": "Leistung (W): PV = Wp, Lader = max. W",
+                "en": "Power (W): PV = Wp, charger = max. W"
               },
               "width": "14%",
               "default": 0,
               "min": 0,
-              "max": 1000,
-              "step": 0.01
+              "max": 1000000,
+              "step": 1
             }
           ]
         },

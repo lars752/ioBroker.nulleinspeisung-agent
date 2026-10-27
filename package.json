@@ -1,6 +1,6 @@
 {
   "name": "iobroker.nulleinspeisung-agent",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Beobachtet den Nulleinspeisung-Adapter, passt dessen Parameter autonom an und steuert den Mindest-SoC per Wetterprognose",
   "author": "Lars",
   "license": "MIT",

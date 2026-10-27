@@ -150,6 +150,18 @@ test('Voller Akku zählt nicht als Wiederaufladung', () => {
     assert.strictEqual(plan.cutoff, plan.park, plan.reason);
 });
 
+test('Maximale Ladeleistung begrenzt die simulierte Ladung', () => {
+    const now = at(2026, 10, 28, 6, 0);
+    const f = parseForecast(fakeRaw(at(2026, 10, 28), [5, 5, 5, 5]), now);
+    const free = new SocPlanner({ ...cfgBase, minLearningDays: 0 });
+    free.learn([]);
+    const capped = new SocPlanner({ ...cfgBase, minLearningDays: 0, chargerMaxW: 300 });
+    capped.learn([]);
+    const a = free.plan({ now, soc: 30, forecast: f }).days[0].chargeKWh;
+    const b = capped.plan({ now, soc: 30, forecast: f }).days[0].chargeKWh;
+    assert.ok(b < a && b <= 9 * 0.3 * 0.92 + 0.01, `begrenzt ${b} kWh, frei ${a} kWh`);
+});
+
 test('Lernphase und fehlende Prognose', () => {
     const now = at(2026, 10, 27, 17, 30);
     const p = new SocPlanner(cfgBase);

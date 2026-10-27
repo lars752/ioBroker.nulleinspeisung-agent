@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nulleinspeisung-agent",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "news": {
+      "1.1.1": {
+        "en": "Energy groups: power column in watts (PV = Wp, charger = max. W) instead of kWp limited to 1000; charger power limits the simulated charge per hour",
+        "de": "Energiegruppen: Leistungsspalte in Watt (PV = Wp, Lader = max. W) statt auf 1000 begrenzter kWp; die Laderleistung begrenzt die simulierte Ladung pro Stunde"
+      },
       "1.1.0": {
         "en": "SoC control by weather forecast: own energy statistics, Open-Meteo PV forecast, learning battery model and seasonal park SoC; minimum SoC is handed to nulleinspeisung (>= 1.0.9) in the evening and morning",
         "de": "SoC-Steuerung per Wetterprognose: eigene Energiestatistik, PV-Prognose von Open-Meteo, lernendes Akkumodell und saisonaler Park-SoC; der Mindest-SoC wird abends und morgens an die Nulleinspeisung (ab 1.0.9) uebergeben"

@@ -23,8 +23,8 @@ PV speist ins Hausnetz, Ladegeräte laden den Akku aus dem Überschuss, Akku-Wec
 
 | Rolle   | Bedeutung                                    | Beispiel                                    |
 |---------|----------------------------------------------|---------------------------------------------|
-| `pv`    | PV-Erzeugung, mit kWp je Gruppe              | `ecoflow-gruppen.0.pv_oben.info.Total_Power` |
-| `lader` | Ladeleistung in den Akku                     | `t2mg-gruppen.0.wohnung_links.info.Total_Power` |
+| `pv`    | PV-Erzeugung, Leistung in Wp je Gruppe       | `ecoflow-gruppen.0.pv_oben.info.Total_Power` |
+| `lader` | Ladeleistung in den Akku, max. W begrenzt die Simulation | `t2mg-gruppen.0.wohnung_links.info.Total_Power` |
 | `akku`  | Entladeleistung der Akku-Wechselrichter      | `ecoflow-gruppen.0.akku_wohnung_links.info.Total_Power` |
 
 Aus dem Tagesverlauf (60 Tage) lernt der Agent:
@@ -51,7 +51,7 @@ Je Zeitfenster gibt es höchstens eine Änderung. Abweichungen unter der Hystere
 
 ### Einrichtung
 
-1. Im Tab **SoC-Prognose** auf **Gruppen scannen** klicken, Rollen prüfen und die kWp je PV-Gruppe eintragen.
+1. Im Tab **SoC-Prognose** auf **Gruppen scannen** klicken, Rollen prüfen und je PV-Gruppe die Peakleistung in Wp sowie je Lader die maximale Ladeleistung in W eintragen.
 2. PLZ, Neigung (z. B. 32°) und Azimut (0 = Süd) eintragen.
 3. Zunächst **ohne** Haken bei „SoC-Steuerung aktiv" laufen lassen: Statistik und Empfehlung werden trotzdem berechnet und das Modell lernt.
 4. Nach einigen Tagen die Empfehlungen unter `SoC.*` prüfen und die Steuerung aktivieren.
